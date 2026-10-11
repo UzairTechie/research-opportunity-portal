@@ -1,0 +1,449 @@
+{
+  "info": {
+    "_postman_id": "4a7e8b9c-2d3e-4f5a-6b7c-8d9e0f1a2b3c",
+    "name": "University Research Opportunity Portal API",
+    "description": "Complete Postman collection for CN Assignment #01. Demonstrates all required CRUD operations, status transitions, input validation error handling, and 404 responses using automated Postman tests and variables.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/opportunities",
+      "type": "string",
+      "description": "Base URL of the Research Opportunities REST API"
+    },
+    {
+      "key": "opportunityId",
+      "value": "1",
+      "type": "string",
+      "description": "ID of the research opportunity used for retrieve, update, and status change tests"
+    },
+    {
+      "key": "deletedOpportunityId",
+      "value": "3",
+      "type": "string",
+      "description": "ID of the research opportunity used for delete and 404 tests"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Research Opportunity #1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201 Created\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains created opportunity data with ID\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data).to.have.property(\"id\");",
+              "    pm.expect(jsonData.data.status).to.eql(\"Open\");",
+              "    ",
+              "    // Store opportunityId for subsequent retrieve & update requests",
+              "    pm.collectionVariables.set(\"opportunityId\", String(jsonData.data.id));",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Edge AI Optimization in Software Defined Networks\",\n  \"description\": \"Investigating low-latency inference pipelines deployed directly on SDN edge switches.\",\n  \"research_area\": \"Computer Networks & AI\",\n  \"faculty_name\": \"Dr. Arshad Khan\",\n  \"department\": \"Computer Science\",\n  \"required_skills\": \"Python, Mininet, PyTorch, C++\",\n  \"available_positions\": 2,\n  \"application_deadline\": \"2026-11-15\",\n  \"status\": \"Open\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}",
+          "host": [
+            "{{baseUrl}}"
+          ]
+        },
+        "description": "Creates first research opportunity. Sets {{opportunityId}} dynamically."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Create Research Opportunity #2",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201 Created\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Opportunity #2 created successfully\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data.title).to.include(\"Zero-Trust Security\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Zero-Trust Security for IoT Healthcare Systems\",\n  \"description\": \"Designing decentralized identity and mutual authentication protocols for biomedical sensor grids.\",\n  \"research_area\": \"Cyber Security\",\n  \"faculty_name\": \"Dr. Sara Malik\",\n  \"department\": \"Computer Science\",\n  \"required_skills\": \"Network Security, Cryptography, Linux, Wireshark\",\n  \"available_positions\": 3,\n  \"application_deadline\": \"2026-11-30\",\n  \"status\": \"Open\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}",
+          "host": [
+            "{{baseUrl}}"
+          ]
+        },
+        "description": "Creates second research opportunity in Cyber Security."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Create Research Opportunity #3",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201 Created\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Opportunity #3 created successfully\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    ",
+              "    // Store deletedOpportunityId for subsequent delete and 404 tests",
+              "    pm.collectionVariables.set(\"deletedOpportunityId\", String(jsonData.data.id));",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Autonomous UAV Swarm Communication Protocols\",\n  \"description\": \"Analyzing ad-hoc mesh networking resiliency during high-interference tactical conditions.\",\n  \"research_area\": \"Wireless & Mobile Networks\",\n  \"faculty_name\": \"Prof. Tariq Mehmood\",\n  \"department\": \"Electrical & Computer Engineering\",\n  \"required_skills\": \"NS-3, C++, MATLAB, Radio Frequency Basics\",\n  \"available_positions\": 1,\n  \"application_deadline\": \"2026-10-25\",\n  \"status\": \"Open\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}",
+          "host": [
+            "{{baseUrl}}"
+          ]
+        },
+        "description": "Creates third research opportunity. Sets {{deletedOpportunityId}} for delete demonstration."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Retrieve All Opportunities",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Returns array of research opportunities\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data).to.be.an(\"array\");",
+              "    pm.expect(jsonData.data.length).to.be.at.least(3);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}",
+          "host": [
+            "{{baseUrl}}"
+          ]
+        },
+        "description": "Retrieves all research opportunities stored in the database."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Retrieve One Opportunity by ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Retrieved opportunity matches requested ID\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(String(jsonData.data.id)).to.eql(pm.collectionVariables.get(\"opportunityId\"));",
+              "    pm.expect(jsonData.data).to.have.property(\"title\");",
+              "    pm.expect(jsonData.data).to.have.property(\"faculty_name\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/{{opportunityId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "{{opportunityId}}"
+          ]
+        },
+        "description": "Retrieves complete details of an opportunity using {{opportunityId}}."
+      },
+      "response": []
+    },
+    {
+      "name": "6. Update an Opportunity",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Opportunity fields updated successfully\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data.available_positions).to.eql(4);",
+              "    pm.expect(jsonData.data.required_skills).to.include(\"Distributed Systems\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"available_positions\": 4,\n  \"required_skills\": \"Python, Mininet, PyTorch, C++, Distributed Systems\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/{{opportunityId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "{{opportunityId}}"
+          ]
+        },
+        "description": "Updates fields (positions and required skills) of an opportunity using {{opportunityId}}."
+      },
+      "response": []
+    },
+    {
+      "name": "7. Change Opportunity Status from Open to Closed",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Status successfully changed to Closed\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data.status).to.eql(\"Closed\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"Closed\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/{{opportunityId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "{{opportunityId}}"
+          ]
+        },
+        "description": "Changes status of {{opportunityId}} from Open to Closed."
+      },
+      "response": []
+    },
+    {
+      "name": "8. Delete an Opportunity",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Deletion success message confirmed\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.message).to.include(\"deleted successfully\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/{{deletedOpportunityId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "{{deletedOpportunityId}}"
+          ]
+        },
+        "description": "Deletes opportunity {{deletedOpportunityId}} permanently from the database."
+      },
+      "response": []
+    },
+    {
+      "name": "9. Request Deleted Opportunity (Demonstrate 404 Not Found)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "",
+              "pm.test(\"Error response indicates opportunity not found\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.false;",
+              "    pm.expect(jsonData.message).to.include(\"not found\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/{{deletedOpportunityId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "{{deletedOpportunityId}}"
+          ]
+        },
+        "description": "Requests the deleted opportunity {{deletedOpportunityId}} to demonstrate 404 Not Found response."
+      },
+      "response": []
+    },
+    {
+      "name": "10. Send Invalid Data (Demonstrate 400 Bad Request)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Response returns clear validation error details\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.false;",
+              "    pm.expect(jsonData.message).to.include(\"Validation Error: Missing required fields\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Incomplete Research Opportunity Without Required Fields\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}",
+          "host": [
+            "{{baseUrl}}"
+          ]
+        },
+        "description": "Sends an invalid/incomplete payload with missing fields to demonstrate 400 Bad Request validation response."
+      },
+      "response": []
+    }
+  ]
+}
